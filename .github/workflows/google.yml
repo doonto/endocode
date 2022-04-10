@@ -46,11 +46,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: go
+        
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
