@@ -12,17 +12,17 @@ check: prepare_metalinter
 rebuild: clean
 	CGO_ENABLED=0 GOOS=${GOOS} go build -v -a -mod vendor \
 		-ldflags "-X main.commit=${COMMIT} -X main.buildTime=${BUILD_TIME}" \
-		-o bin/${GOOS}/${APP} 
+		-o app/${GOOS}/${APP}
 
 .PHONY: build
 build: clean
 	CGO_ENABLED=0 GOOS=${GOOS}   go build -v -mod vendor \
 		-ldflags "-X main.commit=${COMMIT} -X main.buildTime=${BUILD_TIME}" \
-		-o bin/${GOOS}/${APP} 
+		-o app/${GOOS}/${APP}
 
 .PHONY: clean
 clean:
-	@rm -f bin/${GOOS}/${APP}
+	@rm -f app/${GOOS}/${APP}
 
 .PHONY: vendor
 vendor: prepare_dep
