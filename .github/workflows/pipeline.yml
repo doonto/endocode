@@ -24,7 +24,7 @@ env:
   GKE_ZONE: us-east1
   DEPLOYMENT_NAME: endocode
   REPOSITORY: go-docker
-  IMAGE: static-site
+  IMAGE: endocode
   TAG: latest
 
 jobs:
