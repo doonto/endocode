@@ -18,9 +18,13 @@ spec:
         app: endocode-app
     spec:
       containers:
-        - image: endocode:latest
+        - image: europe-docker.pkg.dev/mcspocbdcc-ef6a/go-docker
+          imagePullPolicy: IfNotPresent
           name: app
           ports:
             - containerPort: 8080
               name: http
               protocol: TCP
+      imagePullSecrets:
+        - name: registrypullsecret
+      restartPolicy: Always
