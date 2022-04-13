@@ -3,3 +3,8 @@ kind: Kustomization
 
 resources:
   - ../../base
+
+namePrefix: prod-
+namespace: prod
+commonLabels:
+  environment: prod

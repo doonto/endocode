@@ -3,3 +3,8 @@ kind: Kustomization
 
 resources:
   - ../../base
+
+namePrefix: dev-
+namespace: development
+commonLabels:
+  environment: development
