@@ -25,6 +25,13 @@ spec:
             - containerPort: 8080
               name: http
               protocol: TCP
-      imagePullSecrets:
+#          livenessProbe:
+#            httpGet:
+#              path: /helloworld
+#              port: 8080
+#          securityContext:
+#            allowPrivilegeEscalation: false
+#            readOnlyRootFilesystem: true
+#      imagePullSecrets:
         - name: registrypullsecret
       restartPolicy: Always
