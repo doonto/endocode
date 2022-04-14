@@ -1,3 +1,3 @@
-module github.com/doonto/endocode
+module main
 
 go 1.18
