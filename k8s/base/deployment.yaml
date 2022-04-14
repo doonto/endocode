@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: endocode-app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: endocode-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: endocode-app
+    spec:
+      containers:
+        - image: europe-docker.pkg.dev/mcspocbdcc-ef6a/go-docker/endocode:latest
+          imagePullPolicy: IfNotPresent
+          name: app
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+      imagePullSecrets:
+        - name: registrypullsecret
+      restartPolicy: Always

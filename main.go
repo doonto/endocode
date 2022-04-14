@@ -9,8 +9,9 @@ import (
 func main() {
 	http.HandleFunc("/helloworld", helloHandler) //simple router
 
-	fmt.Printf("Starting server at port 8080, navigate to http://localhost:8080/helloworld\n") //set ther
-	err := http.ListenAndServe(":8080", nil)                                                   //set the port
+	fmt.Printf("Starting server at port 8080, navigate to http://localhost:8080/helloworld\n") //set the message
+	log.Println("Starting HTTP server on :8080")
+	err := http.ListenAndServe(":8080", nil) //set the port
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
