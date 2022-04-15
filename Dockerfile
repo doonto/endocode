@@ -6,28 +6,30 @@ FROM golang:1.18-alpine AS builder
 
 #RUN apk add --no-cache git
 
-# Set the Current Working Directory inside the container
-#WORKDIR .
+RUN mkdir /app
+ADD . /app
 
 # We want to populate the module cache based on the go.{mod,sum} files.
-#COPY go.mod .
+#COPY go.mod ./
 #COPY go.sum .
+#ADD *.go ./
 
 #RUN go mod download
-
-ADD *.go .
 
 # Unit tests
 #RUN go test -v
 
+# Set the Current Working Directory inside the container
+WORKDIR /app
+
 # Build the Go app
-RUN go build main.go
-#
+RUN go build -o main main.go
+
 #FROM scratch
 #COPY --from=builder /main .
 
 # Run the binary program produced by `go install`
-CMD go run main.go
+CMD ["/app/main"]
 
 # This container exposes port 8080 to the outside world
 EXPOSE 8080

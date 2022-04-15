@@ -3,8 +3,10 @@ kind: Service
 metadata:
   name: endocode-service
 spec:
+  type: LoadBalancer
   ports:
     - name: http
       port: 8080
+      targetPort: 8080
   selector:
     app: endocode-app
