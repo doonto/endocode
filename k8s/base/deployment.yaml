@@ -20,7 +20,7 @@ spec:
       containers:
         - image: europe-docker.pkg.dev/mcspocbdcc-ef6a/go-docker/endocode:latest
           imagePullPolicy: IfNotPresent
-          name: app
+          name: cont-endocode
           ports:
             - containerPort: 8080
               name: http
