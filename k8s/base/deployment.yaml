@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: endocode-app
 spec:
-  replicas: 4
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: endocode-app
@@ -18,13 +20,22 @@ spec:
         app: endocode-app
     spec:
       containers:
-        - image: europe-docker.pkg.dev/mcspocbdcc-ef6a/go-docker/endocode:latest
-          imagePullPolicy: IfNotPresent
-          name: cont-endocode
-          ports:
-            - containerPort: 8080
-              name: http
-              protocol: TCP
+#      - command:
+#          - tail
+#          - "-f"
+#          - /dev/null
+#        name: Sleep
+      - image: europe-docker.pkg.dev/mcspocbdcc-ef6a/go-docker/endocode:latest
+        imagePullPolicy: Always
+        name: cont-endocode
+        ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        command:
+          - tail
+          - "-f"
+          - /dev/null
       imagePullSecrets:
         - name: registrypullsecret
       restartPolicy: Always
