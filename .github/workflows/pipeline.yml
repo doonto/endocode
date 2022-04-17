@@ -22,7 +22,7 @@ env:
   GAR_LOCATION: europe
   GKE_CLUSTER: mcs-use1-npr-gke-auto
   GKE_ZONE: us-east1
-  DEPLOYMENT_NAME: endocode
+  DEPLOYMENT_NAME: endocode-app
   REPOSITORY: go-docker
   IMAGE: endocode
   TAG: latest
