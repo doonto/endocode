@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: endocode-app
+  namespace: dev
 spec:
   progressDeadlineSeconds: 600
   replicas: 2

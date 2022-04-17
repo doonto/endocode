@@ -98,7 +98,7 @@ jobs:
     - name: Deploy
       run: |-
         # deploying the endocode app to the cluster, along with overlaying on the base plain yaml
-        cd k8s/overlays/dev
+        cd k8s/base
         
         kustomize edit set image LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$TAG
         kustomize build . | kubectl apply -f -
