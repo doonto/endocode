@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: endocode-service
+  namespace: dev
 spec:
   type: LoadBalancer
   ports:
