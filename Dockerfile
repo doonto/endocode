@@ -28,8 +28,10 @@ RUN go build -o main main.go
 #FROM scratch
 #COPY --from=builder /main .
 
-# Run the binary program produced by `go install`
+# Run the binary`
 CMD ["/app/main"]
+
+ENTRYPOINT ["/app/main"]
 
 # This container exposes port 8080 to the outside world
 EXPOSE 8080
