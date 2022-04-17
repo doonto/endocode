@@ -20,11 +20,6 @@ spec:
         app: endocode-app
     spec:
       containers:
-#      - command:
-#          - tail
-#          - "-f"
-#          - /dev/null
-#        name: Sleep
       - image: europe-docker.pkg.dev/mcspocbdcc-ef6a/go-docker/endocode:latest
         imagePullPolicy: Always
         name: cont-endocode
@@ -32,10 +27,10 @@ spec:
           - containerPort: 8080
             name: http
             protocol: TCP
-        command:
-          - tail
-          - "-f"
-          - /dev/null
+#        command:  // to
+#          - tail  // debug
+#          - "-f"  // the container
+#          - /dev/null  // just in case
       imagePullSecrets:
         - name: registrypullsecret
       restartPolicy: Always

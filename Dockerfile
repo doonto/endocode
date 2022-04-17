@@ -4,7 +4,7 @@
 # compared to Ubuntu
 FROM golang:1.18-alpine AS builder
 
-#RUN apk add --no-cache git
+RUN apk add --no-cache git
 
 RUN mkdir /app
 ADD . /app
@@ -23,7 +23,7 @@ ADD . /app
 WORKDIR /app
 
 # Build the Go app
-RUN go build -o main main.go
+RUN go build -o main .
 
 #FROM scratch
 #COPY --from=builder /main .
