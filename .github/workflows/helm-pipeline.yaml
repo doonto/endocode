@@ -92,7 +92,7 @@ jobs:
 
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: ${GITHUB_WORKSPACE}
+        working-directory: ./
 
       #creating kube config from the GitHub secret. Got the config by "kubectl config view --flatten > ~/Desktop/k.txt"
       - name: Create kube config
