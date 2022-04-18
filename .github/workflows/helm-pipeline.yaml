@@ -92,7 +92,7 @@ jobs:
 
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: ./
+        working-directory: ${GITHUB_WORKSPACE}
 
       #creating kube config from the GitHub secret. Got the config by "kubectl config view --flatten > ~/Desktop/k.txt"
       - name: Create kube config
@@ -100,6 +100,7 @@ jobs:
           mkdir -p ./kube/
           echo "${{ secrets.KUBE_CONFIG }}" > ./kube/config
           chmod 600 ./kube/config
+
       # Deploy with Helm
       - name: Install Helm
         uses: azure/setup-helm@v1
@@ -107,10 +108,11 @@ jobs:
           version: v3.8.2
       # Last check
       - name: Lint helm charts
-        run: helm lint ./chart/
+        run: helm lint ${GITHUB_WORKSPACE}/endocode/chart/
       # deploy
       - name: Deploy
         run: |
+          cd ./chart
           helm upgrade --install --atomic --timeout 1m rest ./chart/ -f ./chart/values.yaml \
             --kube-context mcs-use1-npr-gke-auto --namespace dev --create-namespace \
             --set image.tag=$IMAGE:$TAG
