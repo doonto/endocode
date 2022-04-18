@@ -1,0 +1,15 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: {{ .Values.namespace}}
+  labels:
+    name: {{ .Values.namespace}}
+
+---
+
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: prod
+  labels:
+    name: prod
