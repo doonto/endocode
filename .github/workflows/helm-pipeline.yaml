@@ -1,4 +1,4 @@
-name: Build and Deploy to GKE using Helm
+name: Helm - Build and Deploy to GKE
 
 on:
   workflow_dispatch:
@@ -81,9 +81,19 @@ jobs:
 
       # Helm works on files, so downloading it
       - name: Download repository
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: endocode
+          path: ./
+
+      #where I am?
+      - name: 'Echo download path'
+        run: echo ${{steps.download.outputs.download-path}}
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: ./
+
       #creating kube config from the GitHub secret. Got the config by "kubectl config view --flatten > ~/Desktop/k.txt"
       - name: Create kube config
         run: |
@@ -103,6 +113,6 @@ jobs:
         run: |
           helm upgrade --install --atomic --timeout 1m rest ./chart/ -f ./chart/values.yaml \
             --kube-context mcs-use1-npr-gke-auto --namespace dev --create-namespace \
-            --set image.tag=${{ needs.setup.outputs.tag }}
+            --set image.tag=$IMAGE:$TAG
           
           kubectl -n dev get services -o wide
