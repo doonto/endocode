@@ -97,9 +97,10 @@ jobs:
       #creating kube config from the GitHub secret. Got the config by "kubectl config view --flatten > ~/Desktop/k.txt"
       - name: Create kube config
         run: |
-          mkdir -p ${GITHUB_WORKSPACE}/.kube/
-          echo "${{ secrets.KUBE_CONFIG }}" > ${GITHUB_WORKSPACE}/.kube/config
-          chmod 600 ${GITHUB_WORKSPACE}/.kube/config
+          mkdir -p ./kube/
+          echo "${{ secrets.KUBE_CONFIG }}" > ./kube/config
+          chmod 600 ./kube/config
+
       # Deploy with Helm
       - name: Install Helm
         uses: azure/setup-helm@v1
