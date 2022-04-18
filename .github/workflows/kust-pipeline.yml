@@ -1,4 +1,4 @@
-name: Build and Deploy to GKE using Kustomize
+name: Kustomize - Build and Deploy to GKE
 
 on:
   push:
