@@ -1,0 +1,103 @@
+#_helpers.tpl
+nameOverride: ""
+fullnameOverride: ""
+
+######
+
+#deployment.metadata
+namespace: dev
+
+#deployment.spec
+progressDeadlineSeconds: 600
+revisionHistoryLimit: 3
+replicaCount: 2
+
+#deployment.spec.strategy
+type: RollingUpdate
+
+#deployment.spec.strategy.rollingUpdate
+maxSurge: 1
+maxUnavailable: 1
+
+#deployment.spec.template.metadata
+podAnnotations: { endocode-app }
+
+#deployment.spec.template.metadata.labels
+app: endocode-app
+
+#deployment.spec.template.spec.containers
+image:
+  repository: europe-docker.pkg.dev/mcspocbdcc-ef6a/go-docker/endocode:latest
+  pullPolicy: Always
+  name: cont-endocode
+  tag: "endocode-app"
+
+#deployment.spec.template.spec.containers.ports
+container:
+  containerPort: 8080
+  name: http
+  protocol: TCP
+
+#deployment.spec.template.spec.containers
+imagePullSecrets: [ registrypullsecret ]
+
+podSecurityContext: { }
+securityContext: { }
+
+resources: { }
+#   cpu: 100m
+#   memory: 128Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi
+
+######
+
+#service
+service:
+  type: LoadBalancer
+  port: 8080
+
+######
+
+#ingress
+ingress:
+  enabled: false
+  className: ""
+  annotations: { }
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: [ ]
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+######
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: { }
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+###
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: { }
+
+tolerations: [ ]
+
+affinity: { }

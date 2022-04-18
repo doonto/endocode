@@ -24,10 +24,13 @@ RUN go mod download all
 
 
 # Build the Go app
-RUN go build -o main .
+RUN go build -o main
+#RUN ls
+RUN ls ./main
 
-#FROM scratch
-#COPY --from=builder . /app
+##
+FROM scratch
+COPY --from=builder . .
 
 # Run the binary`
 #CMD ["/app/main"] // owerwritten by ENTRYPOINT
