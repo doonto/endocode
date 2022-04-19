@@ -108,11 +108,10 @@ jobs:
           version: v3.8.2
       # Last check
       - name: Lint helm charts
-        run: helm lint ${GITHUB_WORKSPACE}/endocode/chart/
+        run: helm lint ./chart/
       # deploy
       - name: Deploy
         run: |
-          cd ./chart
           helm upgrade --install --atomic --timeout 1m rest ./chart/ -f ./chart/values.yaml \
             --kube-context mcs-use1-npr-gke-auto --namespace dev --create-namespace \
             --set image.tag=$IMAGE:$TAG
