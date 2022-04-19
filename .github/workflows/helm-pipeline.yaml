@@ -51,10 +51,10 @@ jobs:
         uses: github/codeql-action/analyze@v2
 
       - name: Authorisation on GKE and receiving the KUBECONFIG
-        uses: 'google-github-actions/auth@v0'
+        uses: google-github-actions/auth@v0
         with:
-          credentials_json: '${{ secrets.GCP_ENDOCODE }}'
-          token_format: 'access_token'
+          credentials_json: ${{ secrets.GCP_ENDOCODE }}
+          token_format: access_token
       #
       #      - name: Docker configuration
       #        run: |-
@@ -106,10 +106,22 @@ jobs:
       #          gke-cluster: $GKE_CLUSTER
       #          gke-zone: $GKE_ZONE
       #          gke-sa-key: ${{ secrets.GCP_ENDOCODE }}
+      - name: Set Cluster credentials
+        run: |
+          echo ::set-env name=CLUSTER_NAME::mcs-use1-npr-gke-auto
+          echo ::set-env name=CLUSTER_ZONE::us-east1
+          echo ::set-env name=PROJECT_NAME::${{ secrets.GKE_PROJECT }}
 
       # install/upgrade helm chart
-      - name: Get status of what has been deployed
+      - name: Deploy
         run: |
+          echo "${{ secrets.GCP_ENDOCODE }}" | base64 --decode > ${HOME}/gcloud.json
+          gcloud auth activate-service-account --key-file=${HOME}/gcloud.json
+          gcloud auth configure-docker
+          gcloud container clusters get-credentials \
+          mcs-use1-npr-gke-auto --zone
+          us-east1 --project ${{ secrets.GKE_PROJECT }}
+          
           helm upgrade --install $DEPLOYMENT_NAME ./chart \
           --values ./chart/values.yaml \
           
