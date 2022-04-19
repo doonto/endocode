@@ -117,8 +117,8 @@ jobs:
       # install/upgrade helm chart
       - name: Get status of what has been deployed
         run: |
-        helm upgrade --install $DEPLOYMENT_NAME ./chart \
-        --values ./chart/values.yaml \
-        
-        kubectl -n dev rollout status deployment/$DEPLOYMENT_NAME
-        kubectl -n dev get services -o wide
+          helm upgrade --install $DEPLOYMENT_NAME ./chart \
+          --values ./chart/values.yaml \
+          
+          kubectl -n dev rollout status deployment/$DEPLOYMENT_NAME
+          kubectl -n dev get services -o wide
