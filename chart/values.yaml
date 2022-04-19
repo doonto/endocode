@@ -39,7 +39,7 @@ container:
   protocol: TCP
 
 #deployment.spec.template.spec.containers
-imagePullSecrets: [ registrypullsecret ]
+imagePullSecrets: "registrypullsecret"
 
 podSecurityContext: { }
 securityContext: { }
