@@ -17,7 +17,7 @@ WORKDIR /app
 
 RUN go mod download all
 
-# Unit tests
+# Unit tests when I dare to write them
 #RUN go test -v
 
 # Build the Go app
