@@ -5,7 +5,7 @@ fullnameOverride: ""
 ######
 
 #deployment.metadata
-namespace: dev
+namespace: stage
 
 #deployment.spec
 progressDeadlineSeconds: 600
