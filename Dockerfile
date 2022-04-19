@@ -12,16 +12,13 @@ ADD . /app
 # We want to populate the module cache based on the go.{mod,sum} files.
 COPY go.mod ./app
 #COPY go.sum .
-#ADD *.go ./
+
 WORKDIR /app
 
 RUN go mod download all
 
 # Unit tests
 #RUN go test -v
-
-# Set the Current Working Directory inside the container
-
 
 # Build the Go app
 RUN go build -o main

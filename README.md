@@ -4,7 +4,7 @@ To create a simplest http web-server in Golang, package it in the Docker image a
 
 ## Usage cases
 
-Build and deploy to GKE or locally. Access the created host with :8080/helloworld. All the other URLs must give the 404
+Build and deploy to GKE or locally. Access the created host with :8080/helloworld. All the other URLs give the 404
 error.
 
 ### Dependencies
@@ -26,6 +26,28 @@ The code supposed to be run only in container. Ensure, you have all the dependen
 
 ```make -f makefile```
 
-Builds and run the code in the docker container. Brings some other non-executing by default commands as well.
+Builds and runs the code in the docker container locally. You shouldn't run binaries locally, if you suppose to run
+container in the cloud. Brings some other non-executing by default commands as well.
 
-####
+#### Docker run for local build and IDE
+
+```docker build -t latest . && docker run -p localhost:8080:8080 --name endocode latest -rm```
+
+### Deploy
+
+Deployment pipelines are defined in ```.github/workflows```. There are kustomize - based pipeline, which utilizes the
+overlay way of making updates and helm-based pipeline, templating all the values. kust-pipeline.yml is set up to be run
+on push to master. helm-pipeline.yaml must be triggered manually.
+
+When creating the pipelines priority was given to a predefined tasks over the inline scripts.
+
+### Debug
+
+To debug the Go-code in the container, you want to run it with the following command,
+see ```k8s/base/deployment.yaml```:
+
+```- tail - "-f" - /dev/null```
+
+then, open the bash in it:
+
+```kubectl exec --stdin --tty <POD-NAME> -- /bin/bash```
