@@ -84,46 +84,24 @@ jobs:
       #        run: ls -R
       #        working-directory: ./
 
-      # Deploy with Helm
-      - name: Install Helm
-        uses: azure/setup-helm@v1
-        with:
-          version: v3.8.2
-
       # Last check
       - name: Lint helm charts
         run: helm lint ./chart/
 
-      #      - name: Deploy to GKE
-      #        uses: jmagnusson/deploy-helm-gke-action@v1
-      #        with:
-      #          docker-image-repo: $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE
-      #          docker-image-tag: $TAG
-      #          helm-release-name: $IMAGE
-      #          helm-chart-path: ./chart
-      #          helm-vars-folder: ./chart
-      #          gke-project: ${{ secrets.GKE_PROJECT }}
-      #          gke-cluster: $GKE_CLUSTER
-      #          gke-zone: $GKE_ZONE
-      #          gke-sa-key: ${{ secrets.GCP_ENDOCODE }}
-      - name: Set Cluster credentials
-        run: |
-          echo ::set-env name=CLUSTER_NAME::mcs-use1-npr-gke-auto
-          echo ::set-env name=CLUSTER_ZONE::us-east1
-          echo ::set-env name=PROJECT_NAME::${{ secrets.GKE_PROJECT }}
+      # Configure Docker to use the gcloud command-line tool as a credential
+      # helper for authentication
+      - run: |-
+          gcloud --quiet auth configure-docker
+
+      # Get the GKE credentials, so we can deploy to the cluster
+      - run: |-
+          gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
 
       # install/upgrade helm chart
       - name: Deploy
         run: |
-          echo "${{ secrets.GCP_ENDOCODE }}" | base64 --decode > ${HOME}/gcloud.json
-          gcloud auth activate-service-account --key-file=${HOME}/gcloud.json
-          gcloud auth configure-docker
-          gcloud container clusters get-credentials \
-          mcs-use1-npr-gke-auto --zone
-          us-east1 --project ${{ secrets.GKE_PROJECT }}
-
           helm upgrade --install $DEPLOYMENT_NAME ./chart \
           --values ./chart/values.yaml \
-          
+
           kubectl -n dev rollout status deployment/$DEPLOYMENT_NAME
           kubectl -n dev get services -o wide
