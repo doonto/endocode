@@ -55,41 +55,34 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_ENDOCODE }}'
           token_format: 'access_token'
-
-      - name: Docker configuration
-        run: |-
-          echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
-      # Get the GKE credentials, so we can deploy to the cluster
-      - name: Set up GKE credentials
-        uses: google-github-actions/get-gke-credentials@v0
-        with:
-          cluster_name: ${{ env.GKE_CLUSTER }}
-          location: ${{ env.GKE_ZONE }}
-
-      # Build the Docker image
-      - name: Build
-        run: |-
-          docker build \
-            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$TAG" \
-            --build-arg GITHUB_SHA="$GITHUB_SHA" \
-            --build-arg GITHUB_REF="$GITHUB_REF" \
-            .
-
-      # Push the Docker image to Google Artifact Registry
-      - name: Publish
-        run: |-
-          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$TAG"
-
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: ./
-
-      #      #creating kube config from the GitHub secret. Got the config by "kubectl config view --flatten > ~/Desktop/k.txt"
-      #      - name: Create kube config
-      #        run: |
-      #          mkdir -p ./kube/
-      #          echo "${{ secrets.KUBE_CONFIG }}" > ./kube/config
-      #          chmod 600 ./kube/config
+      #
+      #      - name: Docker configuration
+      #        run: |-
+      #          echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
+      #      # Get the GKE credentials, so we can deploy to the cluster
+      #      - name: Set up GKE credentials
+      #        uses: google-github-actions/get-gke-credentials@v0
+      #        with:
+      #          cluster_name: ${{ env.GKE_CLUSTER }}
+      #          location: ${{ env.GKE_ZONE }}
+      #
+      #      # Build the Docker image
+      #      - name: Build
+      #        run: |-
+      #          docker build \
+      #            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$TAG" \
+      #            --build-arg GITHUB_SHA="$GITHUB_SHA" \
+      #            --build-arg GITHUB_REF="$GITHUB_REF" \
+      #            .
+      #
+      #      # Push the Docker image to Google Artifact Registry
+      #      - name: Publish
+      #        run: |-
+      #          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$TAG"
+      #
+      #      - name: Display structure of downloaded files
+      #        run: ls -R
+      #        working-directory: ./
 
       # Deploy with Helm
       - name: Install Helm
