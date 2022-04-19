@@ -16,6 +16,7 @@ env:
   REPOSITORY: go-docker
   IMAGE: endocode
   TAG: latest
+  DEPLOY_ENVIRONMENT: dev
 
 jobs:
   setup-build-publish-deploy:
@@ -79,17 +80,6 @@ jobs:
         run: |-
           docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$TAG"
 
-      #      # Helm works on files, so downloading it
-      #      - name: Download repository
-      #        uses: actions/download-artifact@v3
-      #        with:
-      #          name: endocode
-      #          path: ./
-      #
-      #      #where I am?
-      #      - name: 'Echo download path'
-      #        run: echo ${{steps.download.outputs.download-path}}
-
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: ./
@@ -106,14 +96,25 @@ jobs:
         uses: azure/setup-helm@v1
         with:
           version: v3.8.2
+
       # Last check
       - name: Lint helm charts
         run: helm lint ./chart/
-      # deploy
-      - name: Deploy
+
+      - name: Deploy to GKE
+        uses: jmagnusson/deploy-helm-gke-action@v1
+        with:
+          docker-image-repo: $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE
+          docker-image-tag: $TAG
+          helm-release-name: $IMAGE
+          helm-chart-path: ./chart
+          helm-vars-folder: ./chart
+          gke-project: ${{ secrets.GKE_PROJECT }}
+          gke-cluster: $GKE_CLUSTER
+          gke-zone: $GKE_ZONE
+          gke-sa-key: ${{ secrets.GCP_ENDOCODE }}
+
+      - name: Get status of what has been deployed
         run: |
-          helm upgrade --install --atomic --timeout 1m rest ./chart/ -f ./chart/values.yaml \
-            --kube-context mcs-use1-npr-gke-auto --namespace dev --create-namespace \
-            --set image.tag=$IMAGE:$TAG
-          
+          kubectl -n dev rollout status deployment/$DEPLOYMENT_NAME
           kubectl -n dev get services -o wide
